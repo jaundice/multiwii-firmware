@@ -1,6 +1,10 @@
 #ifndef CONFIG_H_
 #define CONFIG_H_
 
+#ifndef MANIAC
+#define MANIAC
+#endif
+
 /*************************************************************************************************/
 /****           CONFIGURABLE PARAMETERS                                                       ****/
 /*************************************************************************************************/
@@ -43,7 +47,7 @@
     //#define HEX6X
     //#define HEX6H  // New Model
     //#define OCTOX8
-    //#define OCTOFLATP
+    #define OCTOFLATP
     //#define OCTOFLATX
     //#define FLYING_WING
     //#define VTAIL4
@@ -129,7 +133,7 @@
       //#define OPENLRSv2MULTI  // OpenLRS v2 Multi Rc Receiver board including ITG3205 and ADXL345
       //#define BOARD_PROTO_1   // with MPU6050 + HMC5883L + MS baro
       //#define BOARD_PROTO_2   // with MPU6050 + slave  MAG3110 + MS baro
-      //#define GY_80           // Chinese 10 DOF with  L3G4200D ADXL345 HMC5883L BMP085, LLC
+      #define GY_80           // Chinese 10 DOF with  L3G4200D ADXL345 HMC5883L BMP085, LLC
       //#define GY_85           // Chinese 9 DOF with  ITG3205 ADXL345 HMC5883L LLC
       //#define GY_86           // Chinese 10 DOF with  MPU6050 HMC5883L MS5611, LLC
       //#define GY_88 // Chinese 10 DOF with MPU6050 HMC5883L BMP085, LLC
@@ -664,7 +668,7 @@ At this moment you can use this function only with WinGUI 2.3 release. MultiWiiC
        in NMEA mode the GPS must be configured to output GGA and RMC NMEA sentences (which is generally the default conf for most GPS devices)
        at least 5Hz update rate. uncomment the first line to select the GPS serial port of the arduino */
        
-    //#define GPS_SERIAL 2         // should be 2 for flyduino v2. It's the serial port number on arduino MEGA
+    #define GPS_SERIAL 1         // should be 2 for flyduino v2. It's the serial port number on arduino MEGA
                                    // must be 0 for PRO_MINI (ex GPS_PRO_MINI)
                                    // note: Now a GPS can share MSP on the same port. The only constrain is to not use it simultaneously, and use the same port speed.
 
@@ -678,7 +682,7 @@ At this moment you can use this function only with WinGUI 2.3 release. MultiWiiC
        With UBLOX and MTK_BINARY you don't have to use GPS_FILTERING in multiwii code !!! */
 
     
-    //#define NMEA
+    #define NMEA
     //#define UBLOX
     //#define MTK_BINARY16
     //#define MTK_BINARY19
@@ -784,7 +788,7 @@ Also note, that maqgnetic declination changes with time, so recheck your value e
       //#define LCD_SERIAL3W    // Alex' initial variant with 3 wires, using rx-pin for transmission @9600 baud fixed
       //#define LCD_TEXTSTAR    // SERIAL LCD: Cat's Whisker LCD_TEXTSTAR Module CW-LCD-02 (Which has 4 input keys for selecting menus)
       //#define LCD_VT100       // SERIAL LCD: vt100 compatible terminal emulation (blueterm, putty, etc.)
-      //#define LCD_TTY         // SERIAL LCD: useful to tweak parameters over cable with arduino IDE 'serial monitor'
+      #define LCD_TTY         // SERIAL LCD: useful to tweak parameters over cable with arduino IDE 'serial monitor'
       //#define LCD_ETPP        // I2C LCD: Eagle Tree Power Panel LCD, which is i2c (not serial)
       //#define LCD_LCD03       // I2C LCD: LCD03, which is i2c
       //#define LCD_LCD03S      // SERIAL LCD: LCD03 whit serial 9600 baud comunication enabled.
@@ -825,7 +829,7 @@ Also note, that maqgnetic declination changes with time, so recheck your value e
 
     /* uncomment this line if you plan to use a LCD or OLED for tweaking parameters
      * http://www.multiwii.com/wiki/index.php?title=Extra_features#Configuration_Menu */
-      //#define LCD_CONF
+      #define LCD_CONF
 
     /* to include setting the aux switches for AUX1 -> AUX4 via LCD */
       //#define LCD_CONF_AUX
@@ -842,10 +846,10 @@ Also note, that maqgnetic declination changes with time, so recheck your value e
      * http://www.multiwii.com/wiki/index.php?title=LCD_Telemetry */
 
     /********************************    Activation     ***********************************/
-    //#define LCD_TELEMETRY
+    #define LCD_TELEMETRY
 
     /* to enable automatic hopping between a choice of telemetry pages uncomment this. */
-    //#define LCD_TELEMETRY_AUTO "123452679" // pages 1 to 9 in ascending order
+    #define LCD_TELEMETRY_AUTO "123452679" // pages 1 to 9 in ascending order
     //#define LCD_TELEMETRY_AUTO  "212232425262729" // strong emphasis on page 2
 
     /* manual stepping sequence; first page of the sequence gets loaded at startup to allow non-interactive display */

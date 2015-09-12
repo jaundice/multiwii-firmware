@@ -16,6 +16,9 @@ void initializeServo();
 /**************************************************************************************/
 // since we are uing the PWM generation in a direct way, the pin order is just to inizialie the right pins 
 // its not possible to change a PWM output pin just by changing the order
+#if defined(MANIAC)
+uint8_t PWM_PIN[8] = { 3,4,6,7,12,13,14,15 };      //for a quad+: rear,right,left,front   //+ for y6: 7:under right  8:under left
+#endif
 #if defined(PROMINI)
   uint8_t PWM_PIN[8] = {9,10,11,3,6,5,A2,12};   //for a quad+: rear,right,left,front
 #endif

@@ -149,6 +149,9 @@
 #if defined(__AVR_ATmega1280__) || defined(__AVR_ATmega1281__) || defined(__AVR_ATmega2560__) || defined(__AVR_ATmega2561__)
   #define MEGA
 #endif
+#if defined(__AVR_ATmega1284p__) //maniacbug 1284p
+#define MANIAC
+#endif
 
 
 /**************************************************************************************/
@@ -272,6 +275,98 @@
 #if defined(SIRIUS_AIR) || defined(SIRIUS_AIR_GPS)
   #define RCAUX2PIND17
 #endif
+
+	/**************************  MANIAC  ***********************************/
+#if defined(MANIAC)
+	//#define DISABLE_POWER_PIN
+#define LEDPIN_PINMODE             pinMode (22, OUTPUT);
+#define LEDPIN_TOGGLE              PINC  |= (1<<6);
+#define LEDPIN_ON                  PORTC |= (1<<6); 
+#define LEDPIN_OFF                 PORTC &= ~(1<<6);
+#define BUZZERPIN_PINMODE          pinMode (21, OUTPUT);
+#if defined PILOTLAMP
+#define    PL_PIN_ON    PORTC |= 1<<5;
+#define    PL_PIN_OFF   PORTC &= ~(1<<5);
+#else
+#define BUZZERPIN_ON               PORTC |= 1<<5;
+#define BUZZERPIN_OFF              PORTC &= ~(1<<5);
+#endif 
+
+#if !defined(DISABLE_POWER_PIN)
+//#define POWERPIN_PINMODE           pinMode(1, OUTPUT);
+//#define POWERPIN_ON                PORTB |= 1<<1;
+//#define POWERPIN_OFF               PORTB |= ~(1<<1);
+#else
+#define POWERPIN_PINMODE           ;
+#define POWERPIN_ON                ;
+#define POWERPIN_OFF               ;
+#endif
+#define I2C_PULLUPS_ENABLE         PORTC |= 1<<0; PORTC |= 1<<1;       // PIN 20&21 (SDA&SCL)
+#define I2C_PULLUPS_DISABLE        PORTC &= ~(1<<0); PORTC &= ~(1<<1);
+#define PINMODE_LCD                ;//pinMode(0, OUTPUT);
+#define LCDPIN_OFF                 ;//PORTB &= ~1; //switch OFF digital PIN 0
+#define LCDPIN_ON                  ;//PORTB |= 1;
+
+#define STABLEPIN_PINMODE          pinMode (20, OUTPUT);
+#define STABLEPIN_ON               PORTC |= 1<<4;
+#define STABLEPIN_OFF              PORTC &= ~(1<<4);
+#if defined(PPM_ON_THROTTLE)
+	//configure THROTTLE PIN (A8 pin) as input witch pullup and enabled PCINT interrupt
+#define PPM_PIN_INTERRUPT        DDRK &= ~(1<<0); PORTK |= (1<<0);  PCICR |= (1<<2); PCMSK2 |= (1<<0);
+#else
+#define PPM_PIN_INTERRUPT        attachInterrupt(2, rxInt, RISING);  //PIN 19, also used for Spektrum satellite option
+#endif
+#if !defined(RX_SERIAL_PORT)
+#define RX_SERIAL_PORT           0
+#endif
+	//RX PIN assignment inside the port //for PORTK
+#define THROTTLEPIN                2  //PIN 62 =  PIN A8
+#define ROLLPIN                    0  //PIN 63 =  PIN A9
+#define PITCHPIN                   1  //PIN 64 =  PIN A10
+#define YAWPIN                     5  //PIN 65 =  PIN A11
+#define AUX1PIN                    23  //PIN 66 =  PIN A12
+#define AUX2PIN                    19  //PIN 67 =  PIN A13
+	//#define AUX3PIN                    6  //PIN 68 =  PIN A14
+	//#define AUX4PIN                    7  //PIN 69 =  PIN A15
+#define AUX3PIN                    18  //PIN 68 =  PIN A14
+#define AUX4PIN                    29  //PIN 69 =  PIN A15
+#define V_BATPIN                   31 //A0    // Analog PIN 0
+#define PSENSORPIN                 32 //A2    // Analog PIN 2
+#define PCINT_PIN_COUNT            4
+#define PCINT_RX_BITS              (1<<2),(1<<5),(1<<0),(1<<1)//,(1<<7),(1<<0),(1<<1),(1<<3)
+#define PCINT_RX_PORT              PORTB
+#define PCINT_RX_MASK              PCMSK2
+#define PCIR_PORT_BIT              (1<<2)
+#define RX_PC_INTERRUPT            PCINT2_vect
+#define RX_PCINT_PIN_PORT          PINB
+
+#define SERVO_1_PINMODE            pinMode(3,OUTPUT); // TILT_PITCH - WING left
+#define SERVO_1_PIN_HIGH           PORTB |= 1<<3;
+#define SERVO_1_PIN_LOW            PORTB &= ~(1<<3);;
+#define SERVO_2_PINMODE            pinMode(4,OUTPUT); // TILT_ROLL  - WING right
+#define SERVO_2_PIN_HIGH           PORTB |= 1<<4;
+#define SERVO_2_PIN_LOW            PORTB &= ~(1<<4);
+#define SERVO_3_PINMODE            pinMode(6,OUTPUT); // CAM TRIG  - alt TILT_PITCH
+#define SERVO_3_PIN_HIGH           PORTB |= 1<<6;
+#define SERVO_3_PIN_LOW            PORTB &= ~(1<<6);
+#define SERVO_4_PINMODE            pinMode (7, OUTPUT);// new       - alt TILT_ROLL
+#define SERVO_4_PIN_HIGH           PORTB |= 1<<7; 
+#define SERVO_4_PIN_LOW            PORTB &= ~(1<<7);
+
+#define SERVO_5_PINMODE            pinMode(12,OUTPUT);                      // BI LEFT
+#define SERVO_5_PIN_HIGH           PORTD |= 1<<4;
+#define SERVO_5_PIN_LOW            PORTD &= ~(1<<4);
+#define SERVO_6_PINMODE            pinMode(13,OUTPUT);                      // TRI REAR - BI RIGHT
+#define SERVO_6_PIN_HIGH           PORTD |= 1<<5;
+#define SERVO_6_PIN_LOW            PORTD &= ~(1<<5);
+#define SERVO_7_PINMODE            pinMode(14,OUTPUT);                      // new
+#define SERVO_7_PIN_HIGH           PORTD |= 1<<6;
+#define SERVO_7_PIN_LOW            PORTD &= ~(1<<6);
+#define SERVO_8_PINMODE            pinMode(15,OUTPUT);                      // new
+#define SERVO_8_PIN_HIGH           PORTD |= 1<<7;
+#define SERVO_8_PIN_LOW            PORTD &= ~(1<<7);
+#endif
+
 
 /**************************   atmega328P (Promini)  ************************************/
 #if defined(PROMINI)
@@ -864,7 +959,10 @@
   #undef SERVO_1_HIGH                                    // No software PWM's if we use hardware MEGA PWM or promicro hardware pwm
   #define HW_PWM_SERVOS
 #endif
-
+#if ( defined(MANIAC) && defined(MEGA_HW_PWM_SERVOS) )
+#undef SERVO_1_HIGH                                    // No software PWM's if we use hardware MEGA PWM or promicro hardware pwm
+#define HW_PWM_SERVOS
+#endif
 
 /**************************************************************************************/
 /***************      IMU Orientations and Sensor definitions      ********************/
